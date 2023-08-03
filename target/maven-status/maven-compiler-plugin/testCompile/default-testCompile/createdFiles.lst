@@ -1,0 +1,4 @@
+com\brodygaudel\ebank\services\implementations\AccountOperationServiceImplTest.class
+com\brodygaudel\ebank\services\implementations\CustomerServiceImplTest.class
+com\brodygaudel\ebank\services\implementations\BankAccountServiceImplTest.class
+com\brodygaudel\ebank\EBankApplicationTests.class
