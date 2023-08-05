@@ -27,26 +27,8 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 // Analyser le code avec SonarQube
-                withSonarQubeEnv('SonarQubeServer') {
+                withSonarQubeEnv(installationName: 'sq1') {
                     bat "cd project-app && mvn sonar:sonar -Dsonar.projectKey=e-bank -Dsonar.projectName='e-bank'"
-                }
-            }
-        }
-        
-        stage('Push to Nexus') {
-            steps {
-                // Pousser l'artefact JAR vers le référentiel Nexus
-                withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'admin', passwordVariable: 'admin')]) {
-                    bat 'cd project-app && mvn deploy -Dmaven.deploy.username=%admin% -Dmaven.deploy.password=%admin%'
-                }
-            }
-        }
-        
-        stage('Docker Build') {
-            steps {
-                // Construire une image Docker
-                script {
-                    def dockerImage = docker.build("mon-projet:%BUILD_NUMBER%")
                 }
             }
         }
