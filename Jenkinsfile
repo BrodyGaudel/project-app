@@ -28,7 +28,7 @@ pipeline {
             steps {
                 // Analyser le code avec SonarQube
                 withSonarQubeEnv(installationName: 'sq1') {
-                    bat "cd project-app && mvn sonar:sonar -Dsonar.projectKey=e-bank -Dsonar.projectName='e-bank'"
+                    bat 'cd project-app && mvn sonar:sonar'
                 }
             }
         }
