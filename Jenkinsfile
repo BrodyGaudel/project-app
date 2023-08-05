@@ -36,8 +36,8 @@ pipeline {
         stage('Push to Nexus') {
             steps {
                 // Pousser l'artefact JAR vers le référentiel Nexus
-                withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-                    bat 'cd project-app && mvn deploy -Dmaven.deploy.username=%NEXUS_USERNAME% -Dmaven.deploy.password=%NEXUS_PASSWORD%'
+                withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'admin', passwordVariable: 'admin')]) {
+                    bat 'cd project-app && mvn deploy -Dmaven.deploy.username=%admin% -Dmaven.deploy.password=%admin%'
                 }
             }
         }
