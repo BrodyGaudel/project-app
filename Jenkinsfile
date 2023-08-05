@@ -27,7 +27,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 // Analyser le code avec SonarQube
-                withSonarQubeEnv(installationName: 'sq1') {
+                withSonarQubeEnv('SonarQubeServer') {
                     bat 'cd project-app && mvn sonar:sonar'
                 }
             }
