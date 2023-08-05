@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        MAVEN_HOME = "C:\Users\brody\Applications\apache-maven-3.9.2"
+        MAVEN_HOME = "C:\\Users\\brody\\Applications\\apache-maven-3.9.2"
         PATH = "${env.PATH};${env.MAVEN_HOME}\\bin"
     }
     
@@ -28,7 +28,16 @@ pipeline {
             steps {
                 // Analyser le code avec SonarQube
                 withSonarQubeEnv('SonarQubeServer') {
-                    bat 'cd project-app && mvn sonar:sonar'
+                    bat "cd project-app && mvn sonar:sonar -Dsonar.projectKey=e-bank -Dsonar.projectName='e-bank'"
+                }
+            }
+        }
+        
+        stage('Push to Nexus') {
+            steps {
+                // Pousser l'artefact JAR vers le référentiel Nexus
+                withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                    bat 'cd project-app && mvn deploy -Dmaven.deploy.username=%NEXUS_USERNAME% -Dmaven.deploy.password=%NEXUS_PASSWORD%'
                 }
             }
         }
@@ -38,17 +47,6 @@ pipeline {
                 // Construire une image Docker
                 script {
                     def dockerImage = docker.build("mon-projet:%BUILD_NUMBER%")
-                }
-            }
-        }
-        
-        stage('Push to Nexus') {
-            steps {
-                // Pousser l'image Docker vers Nexus
-                script {
-                    docker.withRegistry('https://nexus-url/', 'nexus-credentials') {
-                        dockerImage.push()
-                    }
                 }
             }
         }
